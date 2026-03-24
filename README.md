@@ -149,3 +149,124 @@ Visit `http://127.0.0.1:8000/admin/` (after `createsuperuser`) to manage:
 - **Instant revocation**: Deleting a `Song` cascades to its `SharedLink` via `on_delete=CASCADE`.
 - **Title constraint**: `Song.title` — max 256 chars, UTF-8.
 - **Ownership isolation**: Every `Song` belongs to exactly one `MediaLibrary`, which belongs to exactly one `User`.
+
+---
+
+## Evidence of CRUD Functionality
+
+All operations were tested against the live local server (`http://127.0.0.1:8000`) using `curl` and the DRF Browsable API.
+
+---
+
+### CREATE — `POST /api/users/`
+
+```bash
+curl -X POST http://127.0.0.1:8000/api/users/ \
+  -H "Content-Type: application/json" \
+  -d '{"google_id":"g-demo-001","user_email":"creator@aisonggen.com","onboarding_status":false}'
+```
+
+**Response — HTTP 201 Created**
+```json
+{
+    "id": 4,
+    "google_id": "g-demo-001",
+    "user_email": "creator@aisonggen.com",
+    "onboarding_status": false
+}
+```
+
+---
+
+### READ — `GET /api/users/`
+
+```bash
+curl http://127.0.0.1:8000/api/users/
+```
+
+**Response — HTTP 200 OK**
+```json
+[
+    {
+        "id": 2,
+        "google_id": "gg",
+        "user_email": "asd@gmail.com",
+        "onboarding_status": false
+    },
+    {
+        "id": 3,
+        "google_id": "test-g-001",
+        "user_email": "testuser@aisonggen.com",
+        "onboarding_status": false
+    },
+    {
+        "id": 4,
+        "google_id": "g-demo-001",
+        "user_email": "creator@aisonggen.com",
+        "onboarding_status": false
+    }
+]
+```
+
+---
+
+### UPDATE — `PATCH /api/users/4/`
+
+```bash
+curl -X PATCH http://127.0.0.1:8000/api/users/4/ \
+  -H "Content-Type: application/json" \
+  -d '{"onboarding_status":true}'
+```
+
+**Response — HTTP 200 OK**
+```json
+{
+    "id": 4,
+    "google_id": "g-demo-001",
+    "user_email": "creator@aisonggen.com",
+    "onboarding_status": true
+}
+```
+
+> `onboarding_status` changed from `false` → `true` ✅
+
+---
+
+### DELETE — `DELETE /api/users/4/`
+
+```bash
+curl -X DELETE http://127.0.0.1:8000/api/users/4/
+```
+
+**Response — HTTP 204 No Content**
+
+Confirmed deletion — a subsequent `GET /api/users/` no longer includes `id: 4`.
+
+---
+
+### Songs endpoint also available
+
+```bash
+curl http://127.0.0.1:8000/api/songs/
+```
+
+**Response — HTTP 200 OK**
+```json
+[]
+```
+
+> Songs are linked to a `MediaLibrary`, which requires a `User` first. Full song creation flow works via Django Admin at `/admin/`.
+
+---
+
+### Django Admin CRUD (Alternative)
+
+All 5 domain models are also fully manageable via the Django Admin panel at `http://127.0.0.1:8000/admin/`:
+
+| Model | Admin URL |
+|---|---|
+| Users | `/admin/generator/user/` |
+| Media Libraries | `/admin/generator/medialibrary/` |
+| Songs | `/admin/generator/song/` |
+| Song Profiles | `/admin/generator/songprofile/` |
+| Shared Links | `/admin/generator/sharedlink/` |
