@@ -1,0 +1,12 @@
+# Core Framework
+Django>=4.2,<5.0
+
+# API and Frontend Readiness
+djangorestframework>=3.14,<4.0
+django-cors-headers>=4.3,<5.0
+
+# Security and Configuration
+python-decouple>=3.8,<4.0
+
+# Utilities
+django-extensions>=3.2,<4.0

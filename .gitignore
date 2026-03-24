@@ -1,0 +1,36 @@
+# Virtual Environment
+venv/
+.venv/
+env/
+
+# Environment Variables
+.env
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyc
+
+# Django
+db.sqlite3
+*.sqlite3
+/static/
+/media/
+local_settings.py
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Distribution / packaging
+*.egg-info/
+dist/
+build/
+
+# Acknowledgement / project docs (not for github)
+Ack/
