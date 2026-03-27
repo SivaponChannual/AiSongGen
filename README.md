@@ -19,7 +19,7 @@ A Django 4.2 + DRF backend for the AI Song Generator Platform, implementing the 
 
 ```bash
 # 1. Clone the repository
-git clone <repo-url>
+git clone https://github.com/SivaponChannual/AiSongGen.git
 cd AiSongGen
 
 # 2. Create and activate virtual environment
@@ -31,8 +31,8 @@ pip install -r requirements.txt
 
 # 4. Create .env file
 cp .env.example .env       # or create manually:
-echo "SECRET_KEY=your-secret-key-here" > .env
-echo "DEBUG=True" >> .env
+echo SECRET_KEY=your-secret-key-here > .env
+echo DEBUG=True >> .env
 
 # 5. Apply migrations
 python manage.py migrate
