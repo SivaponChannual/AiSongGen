@@ -95,7 +95,13 @@ const Library = () => {
                   </span>
                 </div>
                 <div className="col date">
-                  {new Date(song.creation_timestamp).toLocaleDateString()}
+                  {new Date(song.creation_timestamp).toLocaleString([], { 
+                    year: 'numeric', 
+                    month: 'short', 
+                    day: 'numeric', 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                  })}
                 </div>
                 <div className="col actions">
                   {song.audio_file_url && (

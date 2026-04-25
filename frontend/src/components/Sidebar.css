@@ -25,6 +25,7 @@
   display: flex;
   align-items: center;
   gap: 16px;
+  margin-top: 16px;
   margin-bottom: 60px;
   padding-left: 12px;
   width: 100%;
@@ -66,7 +67,6 @@
   opacity: 0;
   transform: translateX(-10px);
   pointer-events: none;
-  position: absolute;
 }
 
 .brand-text-container.visible, .link-text.visible {

@@ -60,7 +60,7 @@ const Forge = () => {
   return (
     <div className="container forge-container">
       <div className="forge-header">
-        <h1 className="text-gradient">The Forge</h1>
+        <h1 className="text-gradient">Create</h1>
         <p>Your primary creation environment. Initialize your parameters.</p>
       </div>
 

@@ -31,7 +31,7 @@ const Sidebar = ({ user, onLogout }) => {
           <Home size={20} /> 
           <span className={`link-text ${isExpanded ? 'visible' : 'hidden'}`}>Home</span>
         </NavLink>
-        <NavLink to="/forge" className={({isActive}) => isActive ? "nav-link active" : "nav-link"} title="Create">
+        <NavLink to="/create" className={({isActive}) => isActive ? "nav-link active" : "nav-link"} title="Create">
           <PlusCircle size={20} /> 
           <span className={`link-text ${isExpanded ? 'visible' : 'hidden'}`}>Create</span>
         </NavLink>
@@ -47,9 +47,13 @@ const Sidebar = ({ user, onLogout }) => {
             <Settings size={20} />
             <span className={`link-text ${isExpanded ? 'visible' : 'hidden'}`}>Settings</span>
           </button>
-          <button className="nav-link nav-button" onClick={onLogout} title="Account">
+          <button className="nav-link nav-button" title="Account">
             <User size={20} />
             <span className={`link-text ${isExpanded ? 'visible' : 'hidden'}`}>Account</span>
+          </button>
+          <button className="nav-link nav-button" onClick={onLogout} title="Logout">
+            <span style={{width: 20, display: 'inline-block', textAlign: 'center'}}>⎋</span>
+            <span className={`link-text ${isExpanded ? 'visible' : 'hidden'}`}>Logout</span>
           </button>
         </nav>
       </div>

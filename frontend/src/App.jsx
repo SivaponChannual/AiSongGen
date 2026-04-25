@@ -35,11 +35,15 @@ function App() {
           <Routes>
             <Route 
               path="/" 
-              element={user ? <Navigate to="/forge" /> : <Login onLogin={handleLogin} />} 
+              element={user ? <Navigate to="/create" /> : <Login onLogin={handleLogin} />} 
             />
             <Route 
-              path="/forge" 
+              path="/create" 
               element={user ? <Forge /> : <Navigate to="/" />} 
+            />
+            <Route 
+              path="/home" 
+              element={user ? <Navigate to="/create" /> : <Navigate to="/" />} 
             />
             <Route 
               path="/library" 
