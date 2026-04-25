@@ -38,8 +38,11 @@ class SunoSongGeneratorStrategy(SongGeneratorStrategy):
         payload = {
             "prompt": prompt,
             "title": song_profile.song.title,
-            "make_instrumental": song_profile.vocal_selection == "INSTRUMENTAL",
+            "instrumental": song_profile.vocal_selection == "INSTRUMENTAL",
             "wait_audio": False,
+            "model": "V3_5",
+            "customMode": False,
+            "callBackUrl": "https://example.com/callback"
         }
 
         response = requests.post(
