@@ -8,6 +8,7 @@ from .views import (
     UserDetailView,
     SongListCreateView,
     SongDetailView,
+    SongGenerateView,
 )
 
 urlpatterns = [
@@ -18,4 +19,7 @@ urlpatterns = [
     # Song endpoints (UUID primary key)
     path('songs/', SongListCreateView.as_view(), name='song-list-create'),
     path('songs/<uuid:pk>/', SongDetailView.as_view(), name='song-detail'),
+
+    # Song Generation (Strategy Pattern – Exercise 4)
+    path('songs/generate/', SongGenerateView.as_view(), name='song-generate'),
 ]

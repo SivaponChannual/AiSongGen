@@ -39,6 +39,12 @@ class Song(models.Model):
         on_delete=models.CASCADE,
         related_name='songs',
     )
+    generation_task_id = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        help_text='Task ID returned by the generation strategy (mock or Suno API).',
+    )
 
     class Meta:
         verbose_name = 'Song'

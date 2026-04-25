@@ -90,6 +90,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # --- CORS (allow all origins in development) ---
 CORS_ALLOW_ALL_ORIGINS = True
 
+# --- Song Generation Strategy (Exercise 4: Strategy Pattern) ---
+# 'mock' = deterministic offline testing | 'suno' = real Suno API calls
+GENERATOR_STRATEGY = config('GENERATOR_STRATEGY', default='mock')
+SUNO_API_KEY = config('SUNO_API_KEY', default='')
+
 # --- Django REST Framework ---
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
