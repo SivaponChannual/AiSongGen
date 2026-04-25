@@ -10,8 +10,12 @@ from .views import (
     SongDetailView,
     SongGenerateView,
 )
+from .auth import GoogleLoginView
 
 urlpatterns = [
+    # Auth
+    path('auth/google/', GoogleLoginView.as_view(), name='auth-google'),
+
     # User endpoints
     path('users/', UserListCreateView.as_view(), name='user-list-create'),
     path('users/<int:pk>/', UserDetailView.as_view(), name='user-detail'),

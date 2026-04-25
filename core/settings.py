@@ -95,6 +95,9 @@ CORS_ALLOW_ALL_ORIGINS = True
 GENERATOR_STRATEGY = config('GENERATOR_STRATEGY', default='mock')
 SUNO_API_KEY = config('SUNO_API_KEY', default='')
 
+# --- Google OAuth2 ---
+GOOGLE_CLIENT_ID = config('GOOGLE_CLIENT_ID', default='')
+
 # --- Django REST Framework ---
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
