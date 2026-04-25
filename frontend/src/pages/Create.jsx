@@ -6,7 +6,7 @@ import './Create.css';
 // Import local images
 import imgPop from '../assets/genre_pop_notext_1777132975981.png';
 import imgJPop from '../assets/genre_jpop_notext_1777132995076.png';
-import imgJdm from '../assets/genre_jdm_notext_1777133010173.png';
+import imgJdm from '../assets/genre_jdm_edited_1777133836437.png';
 import imgRock from '../assets/genre_rock_notext_1777133025177.png';
 import imgElectronic from '../assets/genre_electronic_notext_1777133044638.png';
 
