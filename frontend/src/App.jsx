@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Login from './pages/Login';
 import Forge from './pages/Forge';
 import Library from './pages/Library';
-import TopNav from './components/TopNav';
+import Sidebar from './components/Sidebar';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -28,10 +28,10 @@ function App() {
 
   return (
     <Router>
-      <div className="app-wrapper">
-        {user && <TopNav user={user} onLogout={handleLogout} />}
+      <div className="app-layout">
+        {user && <Sidebar user={user} onLogout={handleLogout} />}
         
-        <main className="main-content">
+        <main className={`main-content ${!user ? 'full-width' : ''}`}>
           <Routes>
             <Route 
               path="/" 

@@ -1,8 +1,12 @@
 .login-page {
   min-height: 100vh;
   background-color: #0d0d12;
-  background-image: radial-gradient(circle at 10% 40%, rgba(189, 0, 255, 0.05) 0%, transparent 40%),
-                    radial-gradient(circle at 90% 60%, rgba(0, 240, 255, 0.05) 0%, transparent 40%);
+  background-image: 
+    linear-gradient(to right, rgba(13, 13, 18, 0.95) 0%, rgba(13, 13, 18, 0.7) 100%),
+    url('../assets/studio_bg.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   display: flex;
   flex-direction: column;
   color: #fff;
