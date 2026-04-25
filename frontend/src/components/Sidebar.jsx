@@ -1,21 +1,17 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, PlusCircle, Library, Settings, User, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Home, PlusCircle, Library, Settings, User } from 'lucide-react';
 import './Sidebar.css';
 
 const Sidebar = ({ user, onLogout }) => {
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <aside className={`sidebar ${isExpanded ? 'expanded' : 'collapsed'}`}>
-      <button 
-        className="toggle-sidebar-btn" 
-        onClick={() => setIsExpanded(!isExpanded)}
-        title={isExpanded ? "Collapse Sidebar" : "Expand Sidebar"}
-      >
-        {isExpanded ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
-      </button>
-
+    <aside 
+      className={`sidebar ${isExpanded ? 'expanded' : 'collapsed'}`}
+      onMouseEnter={() => setIsExpanded(true)}
+      onMouseLeave={() => setIsExpanded(false)}
+    >
       <div className="sidebar-brand">
         <div className="brand-avatar-box">
           <img 
@@ -24,26 +20,24 @@ const Sidebar = ({ user, onLogout }) => {
             className="brand-avatar-img"
           />
         </div>
-        {isExpanded && (
-          <div className="brand-text-container">
-            <span className="brand-name">Sonic</span>
-            <span className="brand-sub">Pro Creator</span>
-          </div>
-        )}
+        <div className={`brand-text-container ${isExpanded ? 'visible' : 'hidden'}`}>
+          <span className="brand-name">Sonic</span>
+          <span className="brand-sub">Pro Creator</span>
+        </div>
       </div>
       
       <nav className="sidebar-links">
         <NavLink to="/home" className={({isActive}) => isActive ? "nav-link active" : "nav-link"} title="Home">
           <Home size={20} /> 
-          {isExpanded && <span className="link-text">Home</span>}
+          <span className={`link-text ${isExpanded ? 'visible' : 'hidden'}`}>Home</span>
         </NavLink>
         <NavLink to="/forge" className={({isActive}) => isActive ? "nav-link active" : "nav-link"} title="Create">
           <PlusCircle size={20} /> 
-          {isExpanded && <span className="link-text">Create</span>}
+          <span className={`link-text ${isExpanded ? 'visible' : 'hidden'}`}>Create</span>
         </NavLink>
         <NavLink to="/library" className={({isActive}) => isActive ? "nav-link active" : "nav-link"} title="Library">
           <Library size={20} /> 
-          {isExpanded && <span className="link-text">Library</span>}
+          <span className={`link-text ${isExpanded ? 'visible' : 'hidden'}`}>Library</span>
         </NavLink>
       </nav>
 
@@ -51,11 +45,11 @@ const Sidebar = ({ user, onLogout }) => {
         <nav className="sidebar-links bottom-links">
           <button className="nav-link nav-button" title="Settings">
             <Settings size={20} />
-            {isExpanded && <span className="link-text">Settings</span>}
+            <span className={`link-text ${isExpanded ? 'visible' : 'hidden'}`}>Settings</span>
           </button>
           <button className="nav-link nav-button" onClick={onLogout} title="Account">
             <User size={20} />
-            {isExpanded && <span className="link-text">Account</span>}
+            <span className={`link-text ${isExpanded ? 'visible' : 'hidden'}`}>Account</span>
           </button>
         </nav>
       </div>
