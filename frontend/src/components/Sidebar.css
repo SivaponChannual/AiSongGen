@@ -37,22 +37,15 @@
   justify-content: center;
 }
 
-.brand-avatar-box {
-  width: 48px;
-  height: 48px;
-  min-width: 48px;
-  background: #1f2937;
-  border-radius: 12px;
+.brand-logo-box {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  background: linear-gradient(135deg, #a855f7, #8b5cf6);
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-}
-
-.brand-avatar-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
 .brand-text-container {

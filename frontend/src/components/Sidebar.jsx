@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, PlusCircle, Library, Settings, User } from 'lucide-react';
+import { Home, PlusCircle, Library, Settings, User, Disc3 } from 'lucide-react';
 import './Sidebar.css';
 
 const Sidebar = ({ user, onLogout }) => {
@@ -13,12 +13,8 @@ const Sidebar = ({ user, onLogout }) => {
       onMouseLeave={() => setIsExpanded(false)}
     >
       <div className="sidebar-brand">
-        <div className="brand-avatar-box">
-          <img 
-            src="https://api.dicebear.com/9.x/avataaars/svg?seed=Felix&backgroundColor=242424" 
-            alt="Avatar" 
-            className="brand-avatar-img"
-          />
+        <div className="brand-logo-box">
+          <Disc3 size={24} color="#fff" />
         </div>
         <div className={`brand-text-container ${isExpanded ? 'visible' : 'hidden'}`}>
           <span className="brand-name">Sonic</span>
