@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Play, Pause, Disc3, Download, Loader } from 'lucide-react';
+import { Play, Pause, Disc3, Download, Loader, MoreVertical, Heart } from 'lucide-react';
 import './Library.css';
 
 const Library = () => {
@@ -46,91 +46,122 @@ const Library = () => {
     }
   };
 
+  const toggleFavorite = async (song) => {
+    try {
+      await fetch(`http://127.0.0.1:8000/api/songs/${song.song_id}/`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ is_favorited: !song.is_favorited })
+      });
+      fetchSongs(false);
+    } catch (err) {
+      console.error('Failed to toggle favorite', err);
+    }
+  };
+
   return (
     <div className="container library-container">
       <div className="library-header">
         <h1 className="text-gradient">Media Library</h1>
-        <p>Manage your high-fidelity neural compositions. Every track is rendered in Obsidian Flux audio.</p>
+        <p>Your high-fidelity neural compositions. Every track rendered in Obsidian Flux audio.</p>
       </div>
 
-      <div className="library-content glass-panel">
-        <div className="library-table-header">
-          <div className="col title">TITLE</div>
-          <div className="col status">STATUS</div>
-          <div className="col date">CREATION DATE</div>
-          <div className="col actions"></div>
+      {loading ? (
+        <div className="library-loading">
+          <Loader className="spin" size={48} />
+          <p>Loading neural tracks...</p>
         </div>
-
-        {loading ? (
-          <div className="library-loading">
-            <Loader className="spin" size={32} />
-            <p>Loading neural tracks...</p>
-          </div>
-        ) : songs.length === 0 ? (
-          <div className="library-empty">
-            <Disc3 size={48} />
-            <h3>No compositions found</h3>
-            <p>Head to The Forge to generate your first track.</p>
-          </div>
-        ) : (
-          <div className="song-list">
-            {songs.map(song => (
-              <div key={song.song_id} className={`song-row ${playingSong?.song_id === song.song_id ? 'playing' : ''}`}>
-                <div className="col title">
-                  <div className="play-btn-wrapper" onClick={() => togglePlay(song)}>
-                    {(song.status === 'SUCCESS' || song.status === 'READY') ? (
-                      playingSong?.song_id === song.song_id ? <Pause size={20} /> : <Play size={20} />
-                    ) : (
-                      <Loader size={20} className="spin" />
-                    )}
+      ) : songs.length === 0 ? (
+        <div className="library-empty glass-panel">
+          <Disc3 size={64} />
+          <h3>No compositions found</h3>
+          <p>Head to Create to generate your first track.</p>
+        </div>
+      ) : (
+        <div className="songs-grid">
+          {songs.map(song => (
+            <div key={song.song_id} className={`song-card glass-panel ${playingSong?.song_id === song.song_id ? 'playing' : ''}`}>
+              
+              {/* Album Art */}
+              <div className="album-art-wrapper" onClick={() => togglePlay(song)}>
+                {song.album_art_url ? (
+                  <img src={song.album_art_url} alt={song.title} className="album-art" />
+                ) : (
+                  <div className="album-art-placeholder">
+                    <Disc3 size={48} />
                   </div>
-                  <div className="song-info">
-                    <span className="song-name">{song.title}</span>
-                    <span className="song-id">{song.generation_task_id || 'No Task ID'}</span>
-                  </div>
-                </div>
-                <div className="col status">
-                  <span className={`status-badge ${song.status?.toLowerCase() || 'pending'}`}>
-                    {song.status || 'PENDING'}
-                  </span>
-                </div>
-                <div className="col date">
-                  {new Date(song.creation_timestamp).toLocaleString([], { 
-                    year: 'numeric', 
-                    month: 'short', 
-                    day: 'numeric', 
-                    hour: '2-digit', 
-                    minute: '2-digit' 
-                  })}
-                </div>
-                <div className="col actions">
-                  {song.audio_file_url && (
-                    <a href={song.audio_file_url} target="_blank" rel="noopener noreferrer" className="btn-secondary sm" title="Download">
-                      <Download size={16} />
-                    </a>
+                )}
+                
+                <div className="play-overlay">
+                  {(song.status === 'SUCCESS' || song.status === 'READY') ? (
+                    playingSong?.song_id === song.song_id ? 
+                      <Pause size={32} /> : 
+                      <Play size={32} style={{marginLeft: 4}} />
+                  ) : (
+                    <Loader size={32} className="spin" />
                   )}
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
 
-      {/* Sticky Audio Player (Mock UI) */}
+                <span className={`status-badge-mini ${song.status?.toLowerCase() || 'pending'}`}>
+                  {song.status || 'PENDING'}
+                </span>
+              </div>
+
+              {/* Song Info */}
+              <div className="song-card-content">
+                <h3 className="song-card-title">{song.title}</h3>
+                <p className="song-card-date">
+                  {new Date(song.creation_timestamp).toLocaleDateString([], { 
+                    month: 'short', 
+                    day: 'numeric',
+                    year: 'numeric'
+                  })}
+                </p>
+                <p className="song-card-id">{song.generation_task_id || 'No Task ID'}</p>
+              </div>
+
+              {/* Actions */}
+              <div className="song-card-actions">
+                <button 
+                  className={`action-btn ${song.is_favorited ? 'favorited' : ''}`}
+                  onClick={() => toggleFavorite(song)}
+                  title={song.is_favorited ? 'Remove from favorites' : 'Add to favorites'}
+                >
+                  <Heart size={18} fill={song.is_favorited ? 'currentColor' : 'none'} />
+                </button>
+                
+                {song.audio_file_url && (
+                  <a 
+                    href={song.audio_file_url} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="action-btn"
+                    title="Download"
+                  >
+                    <Download size={18} />
+                  </a>
+                )}
+                
+                <button className="action-btn" title="More options">
+                  <MoreVertical size={18} />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Sticky Audio Player */}
       {playingSong && (
         <div className="sticky-player glass-panel">
-          <div className="player-info">
-            <span className="player-title">{playingSong.title}</span>
-            <span className="player-status">Now Playing: Obsidian Flux</span>
-          </div>
-          
-          <div className="player-eq">
-            {/* Visual mock of 5-Band EQ */}
-            <div className="eq-bar"><div className="eq-fill" style={{height: '60%'}}></div></div>
-            <div className="eq-bar"><div className="eq-fill" style={{height: '80%'}}></div></div>
-            <div className="eq-bar"><div className="eq-fill" style={{height: '40%'}}></div></div>
-            <div className="eq-bar"><div className="eq-fill" style={{height: '90%'}}></div></div>
-            <div className="eq-bar"><div className="eq-fill" style={{height: '50%'}}></div></div>
+          <div className="player-left">
+            {playingSong.album_art_url && (
+              <img src={playingSong.album_art_url} alt={playingSong.title} className="player-album-art" />
+            )}
+            <div className="player-info">
+              <span className="player-title">{playingSong.title}</span>
+              <span className="player-status">Now Playing: Obsidian Flux</span>
+            </div>
           </div>
           
           <audio 
@@ -139,6 +170,14 @@ const Library = () => {
             autoPlay 
             className="real-player"
           />
+          
+          <div className="player-eq">
+            <div className="eq-bar"><div className="eq-fill" style={{height: '60%'}}></div></div>
+            <div className="eq-bar"><div className="eq-fill" style={{height: '80%'}}></div></div>
+            <div className="eq-bar"><div className="eq-fill" style={{height: '40%'}}></div></div>
+            <div className="eq-bar"><div className="eq-fill" style={{height: '90%'}}></div></div>
+            <div className="eq-bar"><div className="eq-fill" style={{height: '50%'}}></div></div>
+          </div>
         </div>
       )}
     </div>

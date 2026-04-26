@@ -1,0 +1,341 @@
+.account-container {
+  padding: 50px 40px !important;
+  max-width: 900px;
+}
+
+.account-header {
+  margin-bottom: 40px;
+}
+
+.account-header h1 {
+  font-size: 42px;
+  margin-bottom: 12px;
+}
+
+.account-header p {
+  color: var(--text-secondary);
+  font-size: 16px;
+}
+
+.account-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.account-section {
+  padding: 0;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* Profile Banner */
+.profile-banner {
+  height: 120px;
+  background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 40px;
+}
+
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 4px solid var(--bg-deep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--neon-cyan);
+  position: absolute;
+  bottom: -50px;
+}
+
+.profile-content {
+  padding: 60px 32px 32px;
+  text-align: center;
+}
+
+.profile-name-section {
+  margin-bottom: 20px;
+}
+
+.profile-name-section {
+  margin-bottom: 20px;
+  width: 100%;
+  position: relative;
+}
+
+.name-display-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+}
+
+.name-display-group h2 {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: center;
+  margin: 0;
+}
+
+.name-display-group .icon-btn {
+  position: absolute;
+  right: 0;
+}
+
+.name-edit-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.name-input {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.name-input:focus {
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 0 2px rgba(0, 240, 255, 0.1);
+}
+
+.icon-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.icon-btn:hover {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border-color: var(--neon-cyan);
+}
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.detail-item svg {
+  color: var(--neon-cyan);
+}
+
+.badge-pro {
+  background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* Section Title */
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 32px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 0;
+}
+
+.section-title svg {
+  color: var(--neon-cyan);
+}
+
+.section-title h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Info Grid */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  padding: 32px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.info-item label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-value {
+  font-size: 15px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.info-value.mono {
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.status-active {
+  color: #00ff7f;
+  font-weight: 600;
+}
+
+/* Subscription Card */
+.subscription-card {
+  padding: 32px;
+  padding-top: 0;
+}
+
+.subscription-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 32px 0 24px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.subscription-header h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.subscription-header p {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.subscription-price {
+  text-align: right;
+}
+
+.price {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--neon-cyan);
+}
+
+.period {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-left: 4px;
+}
+
+.subscription-features {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  color: var(--text-primary);
+}
+
+.check-icon {
+  color: #00ff7f;
+  flex-shrink: 0;
+}
+
+/* Danger Zone */
+.danger-zone {
+  border-color: rgba(255, 0, 127, 0.2);
+}
+
+.danger-actions {
+  padding: 32px;
+  padding-top: 0;
+  margin-top: 32px;
+}
+
+.btn-danger {
+  background: rgba(255, 0, 127, 0.1);
+  border: 1px solid rgba(255, 0, 127, 0.3);
+  color: var(--neon-pink);
+  padding: 14px 32px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-danger:hover {
+  background: rgba(255, 0, 127, 0.2);
+  border-color: var(--neon-pink);
+  transform: translateY(-2px);
+}
+
+.loading-state {
+  text-align: center;
+  padding: 60px;
+  color: var(--text-secondary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .subscription-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .subscription-price {
+    text-align: left;
+  }
+}

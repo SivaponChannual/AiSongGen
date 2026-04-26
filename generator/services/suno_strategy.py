@@ -69,6 +69,7 @@ class SunoSongGeneratorStrategy(SongGeneratorStrategy):
     def check_status(self, task_id: str) -> dict:
         """
         Calls GET /api/v1/generate/record-info to poll generation status.
+        Returns status, audio_url, and image_url if available.
         """
         params = {"taskId": task_id}
         response = requests.get(
@@ -82,15 +83,27 @@ class SunoSongGeneratorStrategy(SongGeneratorStrategy):
 
         status_value = data.get('status', 'PENDING')
         audio_url = None
+        image_url = None
 
         if status_value in ('SUCCESS', 'READY'):
+            # Try to extract audio URL
             audio_url = (
                 data.get('audio_url')
                 or data.get('data', {}).get('audioUrl')
+                or data.get('data', {}).get('audio_url')
+            )
+            
+            # Try to extract image/album art URL
+            image_url = (
+                data.get('image_url')
+                or data.get('data', {}).get('imageUrl')
+                or data.get('data', {}).get('image_url')
+                or data.get('data', {}).get('image_large_url')
             )
 
         return {
             "status": status_value,
             "audio_url": audio_url,
+            "image_url": image_url,
             "raw_response": data,
         }

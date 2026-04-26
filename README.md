@@ -1,10 +1,12 @@
 # AiSongGen — AI Song Generator Platform
 
-A Django 4.2 + DRF backend for the AI Song Generator Platform, implementing the Domain Layer and the **Strategy Design Pattern** for interchangeable song generation.
+A full-stack AI-powered music generation platform with **Django 4.2 + DRF** backend and **React 19 + Vite** frontend, implementing the Domain Layer and the **Strategy Design Pattern** for interchangeable song generation.
 
 ---
 
 ## Stack
+
+### Backend
 | Package | Version | Purpose |
 |---|---|---|
 | Django | ≥ 4.2 | Web framework (MVT) |
@@ -14,9 +16,20 @@ A Django 4.2 + DRF backend for the AI Song Generator Platform, implementing the 
 | django-extensions | ≥ 3.2 | Dev utilities |
 | requests | ≥ 2.31 | HTTP client for Suno API |
 
+### Frontend
+| Package | Version | Purpose |
+|---|---|---|
+| React | 19.0+ | UI library |
+| React Router | 6.x | Client-side routing |
+| Vite | 5.x | Build tool & dev server |
+| Lucide React | Latest | Icon library |
+| @react-oauth/google | Latest | Google OAuth |
+
 ---
 
 ## Installation
+
+### Backend Setup
 
 ```bash
 # 1. Clone the repository
@@ -35,6 +48,7 @@ echo SECRET_KEY=your-secret-key-here > .env
 echo DEBUG=True >> .env
 echo GENERATOR_STRATEGY=mock >> .env
 echo SUNO_API_KEY= >> .env
+echo GOOGLE_CLIENT_ID=your-google-client-id >> .env
 
 # 5. Apply migrations
 python manage.py migrate
@@ -45,6 +59,23 @@ python manage.py createsuperuser
 # 7. Run the development server
 python manage.py runserver
 ```
+
+Backend will be available at: **http://127.0.0.1:8000/**
+
+### Frontend Setup
+
+```bash
+# 1. Navigate to frontend directory
+cd frontend
+
+# 2. Install dependencies
+npm install
+
+# 3. Run the development server
+npm run dev
+```
+
+Frontend will be available at: **http://localhost:5175/**
 
 ---
 
@@ -62,7 +93,7 @@ AiSongGen/
 │   │   ├── enums.py             # Genre, Mood, Occasion, VocalType, GenerationStatus
 │   │   ├── user.py              # User
 │   │   ├── library.py           # MediaLibrary
-│   │   ├── song.py              # Song (UUID PK, ±10s clean(), generation_task_id)
+│   │   ├── song.py              # Song (UUID PK, ±10s clean(), album_art_url)
 │   │   ├── profile.py           # SongProfile
 │   │   ├── shared.py            # SharedLink
 │   │   └── __init__.py
@@ -81,6 +112,21 @@ AiSongGen/
 │   │   ├── urls.py
 │   │   └── __init__.py
 │   └── admin.py                 # All 5 models registered
+├── frontend/                    # React + Vite application
+│   ├── src/
+│   │   ├── pages/               # Route components
+│   │   │   ├── Login.jsx        # Google OAuth authentication
+│   │   │   ├── Home.jsx         # Dashboard with stats
+│   │   │   ├── Create.jsx       # Song generation form
+│   │   │   ├── Library.jsx      # Card-based song collection
+│   │   │   ├── Settings.jsx     # Theme and preferences
+│   │   │   └── Account.jsx      # Profile management
+│   │   ├── components/          # Reusable components
+│   │   │   └── Sidebar.jsx      # Navigation sidebar
+│   │   ├── App.jsx              # Main app with routing
+│   │   └── index.css            # Global styles + theme system
+│   ├── package.json
+│   └── vite.config.js
 ├── .env                         # Secrets (git-ignored)
 ├── .gitignore
 ├── requirements.txt
@@ -114,6 +160,7 @@ classDiagram
         +str title
         +datetime creation_timestamp
         +str audio_file_url
+        +str album_art_url
         +duration duration
         +bool is_favorited
         +str status
@@ -282,8 +329,8 @@ The **Strategy Design Pattern** decouples the song generation logic from the res
 
 | Strategy | Class | Behavior |
 |---|---|---|
-| **Mock** | `MockSongGeneratorStrategy` | Returns a fake task ID instantly. No network calls. Used for development and testing. |
-| **Suno** | `SunoSongGeneratorStrategy` | Calls the real Suno API at `api.sunoapi.org` to generate music. Requires a valid API key. |
+| **Mock** | `MockSongGeneratorStrategy` | Returns a fake task ID instantly. No network calls. Used for development and testing. Provides placeholder album art. |
+| **Suno** | `SunoSongGeneratorStrategy` | Calls the real Suno API at `api.sunoapi.org` to generate music. Requires a valid API key. Captures album art from API response. |
 
 ### Switching Strategies
 
@@ -337,7 +384,7 @@ SongGenerateView calls strategy.generate(profile)
 | `POST` | `/api/songs/` | Create a new song |
 | `GET` | `/api/songs/<uuid>/` | Retrieve a song |
 | `PUT` | `/api/songs/<uuid>/` | Full update a song |
-| `PATCH` | `/api/songs/<uuid>/` | Partial update a song |
+| `PATCH` | `/api/songs/<uuid>/` | Partial update a song (e.g., toggle favorite) |
 | `DELETE` | `/api/songs/<uuid>/` | Delete song (cascades SharedLink) |
 
 ### Song Generation (Strategy Pattern)
@@ -495,6 +542,35 @@ curl -X POST http://127.0.0.1:8000/api/songs/generate/ \
 - **Instant revocation**: Deleting a `Song` cascades to its `SharedLink` via `on_delete=CASCADE`.
 - **Title constraint**: `Song.title` — max 256 chars, UTF-8.
 - **Ownership isolation**: Every `Song` belongs to exactly one `MediaLibrary`, which belongs to exactly one `User`.
+- **Album art support**: Songs can have associated album art URLs captured from generation APIs.
+
+---
+
+## Frontend Features
+
+### Pages
+- **Login** — Google OAuth authentication only
+- **Home** — Dashboard with stats, recent tracks, and quick actions
+- **Create** — Song generation form with genre/mood selection
+- **Library** — Card-based grid with album art, favorites, and playback
+- **Settings** — Theme (Dark/Light/System), audio, and language preferences
+- **Account** — Profile management and subscription information
+
+### Theme System
+The application supports three theme modes:
+- **Dark (Obsidian)** — Default dark theme with neon accents
+- **Light (Luminous)** — Clean light theme for bright environments
+- **System (Auto)** — Automatically matches OS theme preference with real-time detection ( this still in progress)
+
+Theme preference persists across sessions via localStorage.
+
+### UI Features
+- Responsive design
+- Card-based library with album art display
+- Smooth animations and transitions
+- Glass panel effects with backdrop blur
+- Favorite toggle functionality
+- Real-time status updates
 
 ---
 

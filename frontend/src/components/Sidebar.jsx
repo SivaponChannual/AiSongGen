@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, PlusCircle, Library, Settings, User, Disc3 } from 'lucide-react';
+import { Home, PlusCircle, Library, Settings, User, Disc3, LogOut } from 'lucide-react';
 import './Sidebar.css';
 
 const Sidebar = ({ user, onLogout }) => {
@@ -39,16 +39,16 @@ const Sidebar = ({ user, onLogout }) => {
 
       <div className="sidebar-bottom">
         <nav className="sidebar-links bottom-links">
-          <button className="nav-link nav-button" title="Settings">
+          <NavLink to="/settings" className={({isActive}) => isActive ? "nav-link active" : "nav-link"} title="Settings">
             <Settings size={20} />
             <span className={`link-text ${isExpanded ? 'visible' : 'hidden'}`}>Settings</span>
-          </button>
-          <button className="nav-link nav-button" title="Account">
+          </NavLink>
+          <NavLink to="/account" className={({isActive}) => isActive ? "nav-link active" : "nav-link"} title="Account">
             <User size={20} />
             <span className={`link-text ${isExpanded ? 'visible' : 'hidden'}`}>Account</span>
-          </button>
+          </NavLink>
           <button className="nav-link nav-button" onClick={onLogout} title="Logout">
-            <span style={{width: 20, display: 'inline-block', textAlign: 'center'}}>⎋</span>
+            <LogOut size={20} />
             <span className={`link-text ${isExpanded ? 'visible' : 'hidden'}`}>Logout</span>
           </button>
         </nav>

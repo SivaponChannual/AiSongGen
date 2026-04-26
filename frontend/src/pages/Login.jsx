@@ -81,36 +81,6 @@ const Login = ({ onLogin }) => {
               />
             </div>
             
-            <div className="divider">
-              <span>OR</span>
-            </div>
-            
-            <form className="traditional-login-form" onSubmit={(e) => {
-              e.preventDefault();
-              setError('Invalid Studio ID or Access Key. Please use Google Auth to initialize session.');
-            }}>
-              <div className="input-group">
-                <label>STUDIO ID</label>
-                <input type="text" placeholder="architect@sonic.ai" />
-              </div>
-              
-              <div className="input-group">
-                <label className="split-label">
-                  ACCESS KEY
-                  <a href="#" className="forgot-link">FORGOT?</a>
-                </label>
-                <input type="password" placeholder="••••••••" />
-              </div>
-              
-              <button type="submit" className="btn-initialize" disabled={loading}>
-                {loading ? 'Initializing...' : 'Initialize Session'}
-              </button>
-            </form>
-            
-            <div className="card-footer">
-              New architect? <a href="#" className="apply-link">Apply for clearance</a>
-            </div>
-            
             {error && <div className="error-msg">{error}</div>}
           </div>
         </div>

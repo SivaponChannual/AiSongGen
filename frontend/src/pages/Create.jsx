@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sparkles, Activity, Clock, CheckCircle2, Play } from 'lucide-react';
+import { Sparkles, Activity } from 'lucide-react';
 import './Create.css';
 
 // Import local images
@@ -24,19 +24,30 @@ const VOCALS = ['MALE', 'FEMALE', 'INSTRUMENTAL'];
 
 const Create = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    title: '',
-    genre: 'ELECTRONIC',
-    mood: 'ENERGETIC',
-    occasion: 'COMMUTE',
-    vocal_selection: 'MALE',
-    custom_lyrics: '',
-    requested_length: 180
+  
+  const [formData, setFormData] = useState(() => {
+    const saved = localStorage.getItem('createFormData');
+    if (saved) {
+      return JSON.parse(saved);
+    }
+    return {
+      title: '',
+      genre: '',
+      mood: '',
+      occasion: '',
+      vocal_selection: '',
+      custom_lyrics: '',
+      requested_length: 120
+    };
   });
   
-  const [productionState, setProductionState] = useState('IDLE'); // IDLE, GENERATING, SUCCESS, ERROR
+  const [productionState, setProductionState] = useState('IDLE');
   const [error, setError] = useState('');
   const [progress, setProgress] = useState(0);
+
+  React.useEffect(() => {
+    localStorage.setItem('createFormData', JSON.stringify(formData));
+  }, [formData]);
 
   const handleSelect = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -46,18 +57,10 @@ const Create = () => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handlePlayClick = (e, genreId) => {
-    e.stopPropagation(); // Prevent tile selection
-    // Optional: Could add temporary heartbeat state to specific genre ID here if needed
-    // But CSS :active or animation class toggling usually suffices.
-    const btn = e.currentTarget;
-    btn.classList.remove('heartbeat-anim');
-    void btn.offsetWidth; // trigger reflow
-    btn.classList.add('heartbeat-anim');
-  };
-
-  // Format seconds to M:SS
   const formatTime = (secs) => {
+    if (secs < 60) {
+      return `0:${secs.toString().padStart(2, '0')}`;
+    }
     const m = Math.floor(secs / 60);
     const s = secs % 60;
     return `${m}:${s.toString().padStart(2, '0')}`;
@@ -69,7 +72,6 @@ const Create = () => {
     setProgress(0);
     setError('');
 
-    // Simulate progress bar
     const progressInterval = setInterval(() => {
       setProgress(p => {
         if (p >= 95) return 95;
@@ -107,12 +109,11 @@ const Create = () => {
     }
   };
 
-  // Production Monitor View
   if (productionState !== 'IDLE') {
     return (
-      <div className="container forge-container">
+      <div className="create-container">
         <div className="production-monitor">
-          <div className="monitor-card glass-panel">
+          <div className="monitor-card">
             <Activity className={`monitor-icon ${productionState === 'GENERATING' ? 'pulse' : ''}`} size={48} />
             
             <h2>
@@ -134,7 +135,7 @@ const Create = () => {
             </div>
             
             {productionState === 'ERROR' && (
-              <button className="btn-primary retry-btn" onClick={() => setProductionState('IDLE')}>
+              <button className="retry-btn" onClick={() => setProductionState('IDLE')}>
                 Reconfigure Parameters
               </button>
             )}
@@ -144,70 +145,70 @@ const Create = () => {
     );
   }
 
-  // Normal Form View
   return (
-    <div className="container forge-container">
-      <div className="forge-header">
+    <div className="create-container">
+      <div className="create-header">
         <h1 className="text-gradient">Create Track</h1>
         <p>Your primary creation environment. Initialize your parameters.</p>
       </div>
 
-      <form className="forge-form" onSubmit={handleSubmit}>
+      <form className="create-form" onSubmit={handleSubmit}>
         
         {/* Track Title */}
         <div className="form-section">
-          <div className="form-group full-width">
-            <label>Track Title <span className="char-limit">{formData.title.length}/256</span></label>
-            <input 
-              type="text" 
-              name="title" 
-              className="glass-input big-input"
-              value={formData.title} 
-              onChange={handleChange} 
-              maxLength={256}
-              placeholder="e.g. Neon Horizon Echo" 
-              required 
-            />
-          </div>
+          <h3>Track Title</h3>
+          <input 
+            type="text" 
+            name="title" 
+            className="form-input"
+            value={formData.title} 
+            onChange={handleChange} 
+            maxLength={256}
+            placeholder="e.g. Neon Horizon Echo" 
+            required 
+          />
+          <div className="char-count">{formData.title.length}/256</div>
         </div>
 
-        {/* Genre Foundation Tiles */}
+        {/* Genre Foundation */}
         <div className="form-section">
           <h3>Genre Foundation</h3>
           <div className="genre-grid">
             {GENRES.map(g => (
               <div 
                 key={g.id} 
-                className={`genre-tile ${formData.genre === g.id ? 'selected' : ''}`}
+                className={`genre-card ${formData.genre === g.id ? 'selected' : ''}`}
                 onClick={() => handleSelect('genre', g.id)}
                 style={{ backgroundImage: `url(${g.img})` }}
               >
-                <div className="tile-overlay"></div>
-                <div className="tile-content-wrapper">
-                  <span className="tile-title">{g.title}</span>
-                  <button 
-                    type="button"
-                    className="play-button" 
-                    onClick={(e) => handlePlayClick(e, g.id)}
-                  >
-                    <Play fill="white" size={12} style={{marginLeft: 2}} />
-                  </button>
-                </div>
+                <span className="genre-title">{g.title}</span>
+                <button 
+                  type="button"
+                  className="genre-play-btn" 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    // Audio preview will be added here later
+                  }}
+                >
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="white">
+                    <path d="M2 1.5v9l8-4.5z" />
+                  </svg>
+                </button>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Segmented Controls Section */}
-        <div className="form-section split-section">
-          <div className="form-group">
-            <label>Mood</label>
-            <div className="segmented-control">
+        {/* Mood & Occasion */}
+        <div className="form-row">
+          <div className="form-section">
+            <h3>Mood</h3>
+            <div className="button-group">
               {MOODS.map(m => (
                 <button 
                   key={m} 
                   type="button" 
-                  className={`seg-btn ${formData.mood === m ? 'active' : ''}`}
+                  className={`option-btn ${formData.mood === m ? 'active' : ''}`}
                   onClick={() => handleSelect('mood', m)}
                 >
                   {m.charAt(0) + m.slice(1).toLowerCase()}
@@ -216,14 +217,14 @@ const Create = () => {
             </div>
           </div>
 
-          <div className="form-group">
-            <label>Occasion</label>
-            <div className="segmented-control">
+          <div className="form-section">
+            <h3>Occasion</h3>
+            <div className="button-group">
               {OCCASIONS.map(o => (
                 <button 
                   key={o} 
                   type="button" 
-                  className={`seg-btn ${formData.occasion === o ? 'active' : ''}`}
+                  className={`option-btn ${formData.occasion === o ? 'active' : ''}`}
                   onClick={() => handleSelect('occasion', o)}
                 >
                   {o.charAt(0) + o.slice(1).toLowerCase()}
@@ -233,62 +234,64 @@ const Create = () => {
           </div>
         </div>
 
+        {/* Vocal Selection */}
         <div className="form-section">
-          <div className="form-group">
-            <label>Vocal Selection</label>
-            <div className="segmented-control vocal-control">
-              {VOCALS.map(v => (
-                <button 
-                  key={v} 
-                  type="button" 
-                  className={`seg-btn ${formData.vocal_selection === v ? 'active' : ''}`}
-                  onClick={() => handleSelect('vocal_selection', v)}
-                >
-                  {v.charAt(0) + v.slice(1).toLowerCase()}
-                </button>
-              ))}
-            </div>
+          <h3>Vocal Selection</h3>
+          <div className="button-group">
+            {VOCALS.map(v => (
+              <button 
+                key={v} 
+                type="button" 
+                className={`option-btn ${formData.vocal_selection === v ? 'active' : ''}`}
+                onClick={() => handleSelect('vocal_selection', v)}
+              >
+                {v.charAt(0) + v.slice(1).toLowerCase()}
+              </button>
+            ))}
           </div>
         </div>
 
         {/* Lyrical Guidance */}
         <div className="form-section">
-          <div className="form-group full-width">
-            <label>Lyrical Guidance / Theme <span className="optional-badge">Optional</span></label>
-            <textarea 
-              name="custom_lyrics" 
-              className="glass-input"
-              value={formData.custom_lyrics} 
-              onChange={handleChange} 
-              placeholder="Describe specific themes, feelings, or paste custom lyrics here..."
-              rows={4}
-            />
-          </div>
+          <h3>Lyrical Guidance / Theme <span className="optional">Optional</span></h3>
+          <textarea 
+            name="custom_lyrics" 
+            className="form-textarea"
+            value={formData.custom_lyrics} 
+            onChange={handleChange} 
+            placeholder="Describe specific themes, feelings, or paste custom lyrics here..."
+            rows={4}
+          />
         </div>
-        
-        {/* Production Controls */}
-        <div className="form-section production-section glass-panel">
-          <div className="duration-wrapper">
-            <div className="duration-header">
-              <label><Clock size={16}/> Target Duration</label>
-              <span className="duration-value">{formatTime(formData.requested_length)}</span>
-            </div>
+
+        {/* Target Duration */}
+        <div className="form-section">
+          <h3>Target Duration <span className="optional">20 sec - 4 min</span></h3>
+          <div className="duration-control">
+            <div className="duration-value">{formatTime(formData.requested_length)}</div>
             <input 
               type="range" 
               name="requested_length" 
-              className="custom-slider"
+              className="duration-slider"
               value={formData.requested_length} 
               onChange={handleChange} 
-              min="120" max="360" step="5"
+              min="20" max="240" step="10"
             />
-            <div className="slider-labels">
+            <div className="duration-labels">
+              <span>0:20</span>
+              <span>1:00</span>
               <span>2:00</span>
-              <span>6:00</span>
+              <span>3:00</span>
+              <span>4:00</span>
             </div>
           </div>
+        </div>
 
-          <button type="submit" className="btn-primary generate-cta">
-            <Sparkles size={18} /> Initialize Synthesis
+        {/* Generate Button */}
+        <div className="form-actions">
+          <button type="submit" className="generate-btn">
+            <Sparkles size={20} />
+            <span>Generate Track</span>
           </button>
         </div>
       </form>
@@ -296,4 +299,4 @@ const Create = () => {
   );
 };
 
-export default Forge;
+export default Create;

@@ -23,6 +23,12 @@ class Song(models.Model):
     title = models.CharField(max_length=256)
     creation_timestamp = models.DateTimeField(auto_now_add=True)
     audio_file_url = models.URLField(max_length=2048, blank=True, default='')
+    album_art_url = models.URLField(
+        max_length=2048,
+        blank=True,
+        default='',
+        help_text='URL to the album art/cover image from Suno API.',
+    )
     duration = models.DurationField(
         null=True,
         blank=True,
